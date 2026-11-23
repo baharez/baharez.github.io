@@ -1,138 +1,70 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bahareh Zahirodini</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/app.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bahareh Zahirodini</title>
+<meta name="description" content="Researcher in accounting and information economics, studying prediction markets and analyst behaviour.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%230E7C66%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Bahareh Zahirodini</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.html">Home</a></li>
-                    <li><a href="publications.html">Publications</a></li>
-                    <li><a href="experience.html">Experience</a></li>
-                    <li><a href="dashboards.html">Dashboards</a></li>
-                </ul>
-            </div>
-        </div>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">Bahareh Zahirodini</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="research.html">Research</a>
+      <a href="experience.html">Experience</a>
+      <a href="dashboards.html">Dashboards</a>
+      <a href="data/BaharehZahirodini-CV.pdf">CV</a>
     </nav>
-    <div class="container" id="main">
-        <div class="row">
-            <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
-                <tbody>
-                    <tr>
-                        <td style="padding:2.5%;width:63%;vertical-align:middle">
-                            <p style="text-align:center">
-                                <name>Bahareh Zahirodini</name>
-                            </p>
-                            <p>
-                            I am a data scientist and researcher with a Master’s in Business Analytics from Bentley University, passionate about using computational methods to explore social phenomena. My expertise spans Bayesian networks, sentiment analysis, and data visualization. In a recent project, I analyzed Gallup survey data to profile American attitudes toward businesses’ Corporate Social Responsibility (CSR) activities across demographics and political affiliations, as published in Chance. I also leveraged interactive visualizations in a Nightingale piece to reveal patterns in consumer perceptions of sustainability. Currently, I am investigating psychological gaps in survey responses across demographics using the Rasch model and outlier detection in functional data, aligning with my goal to advance human-centric computational research.
-                            </p>
-                            <p style="text-align:center">
-                                <a href="mailto:zahirodiny@gmail.com">Email</a>  / 
-                                <a href="https://linkedin.com/in/bahareh-zahirodini/">LinkedIn</a>  / 
-                                <a href="data/BaharehZahirodini-CV.pdf">CV</a>  / 
-                                <a href="https://github.com/baharez">GitHub</a>
-                            </p>
-                        </td>
-                        <td style="padding:2.5%;width:37%;max-width:37%">
-                            <img src="images/profile.JPG" alt="profile photo" style="width:100%;max-width:100%;object-fit:cover;border-radius:50%;" class="hoverZoomLink" loading="lazy" width="200" height="200">
+  </div>
+</header>
+<main class="wrap">
 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Updates</h2>
-                <ul>
-                    <li><b>Apr 2025</b>: Submitted papers to <i>Significance (RSS)</i> on decision-making and Rasch models.</li>
-                    <li><b>Mar 2025</b>: Publication accepted in <i>Chance (ASA)</i>: on Bayesian analysis of America's business attitudes.</li>
-                    <li><b>May 2024</b>: Graduated with M.S. in Business Analytics from Bentley University (GPA: 3.94).</li>
-                    <li><b>Feb 2024</b>: Won 2nd place in NABA x Bentley Business Bowl for Responsible AI case study.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Selected Projects</h2>
-                <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
-                    <tbody>
-                        <tr>
-                            <td style="padding:8px;width:20%;vertical-align:middle">
-                                <img src="images/consumer_preferences.jpg" width="160">
-                            </td>
-                            <td style="padding:8px;width:80%;vertical-align:middle">
-                                <span class="papertitle">Exploring Consumer Preferences</span></a><br>
-                                Bentley-Gallup Force for Good Survey<br>
-                                Analyzed a randomized module within the Bentley-Gallup survey, to investigate individuals’ willingness-to-pay for ethical business practices. Examined how values and context influence consumer choice by varying information about companies’ social responsibility and measuring participants’ contribution decisions. <br>
-                                <a href="https://github.com/baharez/Bentley-Gallup/blob/abaaa3a2e0d7e7453407afa8da4ae934fa502002/Gallup_Bentley%20Experiment.R"> R Script</a>
-                            </td>
-                        </tr>
-                        
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div class="home">
+  <aside class="card">
+    <img src="images/profile.JPG" alt="Bahareh Zahirodini" width="180" height="180">
+    <h1>Bahareh Zahirodini</h1>
+    <p class="role">Accounting and Information Economics</p>
+    <div class="icons">
+      <a href="mailto:zahirodiny@gmail.com" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2.2.5 7.8 6 7.8-6H4.2ZM20 7.9l-7.4 5.7a1 1 0 0 1-1.2 0L4 7.9V18h16V7.9Z"/></svg></a>
+      <a href="data/BaharehZahirodini-CV.pdf" aria-label="Curriculum vitae" title="CV"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h7l5 5v15H6V2Zm7 1.8V8h4.2L13 3.8ZM8.5 12h7v1.6h-7V12Zm0 3.4h7V17h-7v-1.6Z"/></svg></a>
+      <a href="https://github.com/baharez" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg></a>
+      <a href="https://linkedin.com/in/bahareh-zahirodini/" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0-.02-5ZM3 9.5h4V21H3V9.5Zm6.5 0h3.8v1.6h.05c.53-.95 1.83-1.95 3.76-1.95C21 9.15 22 11.1 22 14.1V21h-4v-6.1c0-1.5-.03-3.4-2.1-3.4-2.1 0-2.4 1.6-2.4 3.3V21h-4V9.5Z"/></svg></a>
     </div>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="app.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93ce9153b82c44d2',t:'MTc0Njc2NjEzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  </aside>
+
+  <div class="prose">
+    <section>
+      <h2>About me</h2>
+      <p>My research sits between accounting and information economics. Prediction markets now list contracts on individual public firms, and their prices are a continuously updated, freely visible probability on events that bear on valuation. I ask what that does to a firm's information environment: whether it lowers the cost of equity, and whether the analysts who cover the firm take it up, ignore it, or are displaced by it.</p>
+      <p>Before returning to research I spent nine years in finance, as a financial analyst and then a finance manager at technology companies in Tehran.</p>
+      <p>I work with large survey and panel data, Bayesian inference, functional data analysis and text as data. My applied statistics work with <a href="https://www.bentley.edu/faculty/m/moinak-bhaduri">Moinak Bhaduri</a> at Bentley appears in <i>Chance</i> and <i>Nightingale</i>.</p>
+    </section>
+
+    <section>
+      <h2>Background</h2>
+      <p>I hold an MS in Business Analytics from <a href="https://www.bentley.edu/">Bentley University</a>, where I am a data analytics research assistant, and a BS in Accounting from Shahid Beheshti University in Tehran.</p>
+    </section>
+
+    <section>
+      <h2>Updates</h2>
+      <ul class="updates">
+        <li><span class="when">Nov 2026</span><span>Began a study of prediction markets and the implied cost of equity.</span></li>
+        <li><span class="when">Apr 2025</span><span>Submitted papers to <i>Significance</i> (RSS) on decision-making and Rasch models.</span></li>
+        <li><span class="when">Mar 2025</span><span>Publication accepted in <i>Chance</i> (ASA) on a Bayesian analysis of American attitudes to business.</span></li>
+        <li><span class="when">May 2024</span><span>Graduated with an MS in Business Analytics from Bentley University.</span></li>
+        <li><span class="when">Feb 2024</span><span>Second place, NABA x Bentley Business Bowl, for a responsible AI case study.</span></li>
+      </ul>
+    </section>
+  </div>
+</div>
+</main>
+<footer><div class="wrap">Bahareh Zahirodini</div></footer>
+</body>
 </html>

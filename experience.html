@@ -1,137 +1,132 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bahareh Zahirodini - Experience</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/app.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experience — Bahareh Zahirodini</title>
+<meta name="description" content="Education, research and professional experience of Bahareh Zahirodini.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%230E7C66%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Bahareh Zahirodini</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="publications.html">Publications</a></li>
-                    <li class="active"><a href="experience.html">Experience</a></li>
-                    <li><a href="dashboards.html">Dashboards</a></li>
-                </ul>
-            </div>
-        </div>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">Bahareh Zahirodini</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="research.html">Research</a>
+      <a href="experience.html" aria-current="page">Experience</a>
+      <a href="dashboards.html">Dashboards</a>
+      <a href="data/BaharehZahirodini-CV.pdf">CV</a>
     </nav>
-    <div class="container" id="main">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Education</h2>
-                <p>
-                    <strong>Bentley University, Waltham, MA</strong><br>
-                    Master of Science in Business Analytics, Data Science | GPA: 3.94<br>
-                    May 2024<br>
-                    Selected coursework: Machine Learning, Data Mining, Time Series Analysis, Statistical Modeling
-                </p>
-                <p>
-                    <strong>Shahid Beheshti University, Tehran, Iran</strong><br>
-                    Bachelor of Science in Accounting | GPA: 3.60<br>
-                    June 2013
-                </p>
-                <h2>Research Experience</h2>
-                <p>
-                    <strong>Research Assistant — Mathematical Sciences and Finance Department</strong><br>
-                    Bentley University, Waltham, MA | May 2023 – Present<br>
-                    <ul>
-                        <li>Conducted Bayesian network analysis on a survey dataset with over 6,000 participants.</li>
-                        <li>Applied e-value on cosine similarity to detect echo chamber effects.</li>
-                        <li>Developed Partial Credit Model to estimate respondents’ attitudes.</li>
-                        <li>Delivered tutorials on data collection and financial modeling using tools like Bloomberg, <br>
-                            FactSet, and Federal Reserve databases in Bentley Summer School, Wall Street 101.</li>
-                        <li>Performed clustering and outlier detection on sentiment score curves.</li>
-                        <li>Designed Python scripts to automate investment research and time series analysis.</li>
-                        <li>Created interactive dashboards using Tableau and R Shiny.</li>
-                    </ul>
-                <h2>Work Experience</h2>
-                <p>
-                    <strong>Finance Manager</strong><br>
-                    Hezardastan IT Group, Tehran, Iran | March 2020 – May 2022<br>
-                    <ul>
-                        <li>Partnered with sales and product team on value chain analysis and overhaul of service delivery, reducing costs by 30% and customer churn by 5%; applied Monte Carlo simulation to optimize service dispatch, increasing capacity utilization by 25%.</li>
-                        <li>Researched investment and expansion opportunities using Cost-Benefit Analysis and Economic Value Added to inform strategic business model decisions.</li>
-                        <li>Led data migration and unified multiple databases, reducing reporting time from 2 days to real-time.</li>
-                    </ul>
-                </p>
-                <h2>Technical Skills</h2>
-                <p>
-                    <strong>Programming:</strong> Python, R, SQL, Excel (Macros, VBA), SAS<br>
-                    <strong>Data Visualization:</strong> Tableau, Power BI, R Shiny<br>
-                    <strong>Analytics:</strong> Bayesian Networks, Social Network Analysis, Time Series Analysis, Regression Analysis, Causal Inference, A/B Testing, Functional Data Analysis, NLP, Text Analysis, Data Mining<br>
-                    <strong>Tools:</strong> Git/GitHub, Alteryx, Snowflake, Microsoft Office
-                </p>
-                <h2>Academic Projects</h2>
-                <p>
-                    <strong>International Students’ Academic Success in U.S. Colleges</strong><br>
-                    Applied PCA and decision trees to predict graduation rates.<br>
-                    <strong>SAT Scores and Racial Composition Analysis</strong><br>
-                    Conducted regression analysis on Massachusetts school data.<br>
-                    <strong>Exploring Consumer Preferences</strong><br>
-                    Performed hypothesis testing on Bentley-Gallup survey data.<br>
-                    <strong>NABA x Bentley Business Bowl (2nd Place)</strong><br>
-                    Analyzed Responsible AI and corporate governance in credit lending.<br>
-                </p>
-            </div>
-        </div>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="app.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93ce915488bcb0e5',t:'MTc0Njc2NjEzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="page">
+<section>
+  <h2>Education</h2>
+  <div class="post">
+    <div class="where"><span class="what">Bentley University</span><span class="when">2022 to 2024</span></div>
+    <p class="org">MS in Business Analytics, minor in Data Science. GPA 3.94</p>
+  </div>
+  <div class="post">
+    <div class="where"><span class="what">Shahid Beheshti University, Tehran</span><span class="when">2009 to 2013</span></div>
+    <p class="org">BS in Accounting</p>
+  </div>
+</section>
+
+<section>
+  <h2>Research experience</h2>
+  <div class="post">
+    <div class="where"><span class="what">Data Analytics Research Assistant</span><span class="when">May 2024 to present</span></div>
+    <p class="org">Bentley University, Waltham, MA</p>
+    <ul>
+      <li>Bayesian network analysis of a survey dataset of more than 6,000 participants.</li>
+      <li>Applied an e-value on cosine similarity to detect echo chamber effects.</li>
+      <li>Built a partial credit model to estimate respondents' latent attitudes.</li>
+      <li>Clustering and outlier detection on sentiment score curves.</li>
+      <li>Interactive dashboards in Tableau and R Shiny to present findings.</li>
+    </ul>
+  </div>
+  <div class="post">
+    <div class="where"><span class="what">Teaching Assistant, Hughey Center for Financial Services</span><span class="when">May 2023 to May 2024</span></div>
+    <p class="org">Bentley University, Waltham, MA</p>
+    <ul>
+      <li>Python scripts to automate investment research and make it reproducible.</li>
+      <li>Tutorials on financial modelling with Bloomberg, FactSet and Federal Reserve data.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Professional experience</h2>
+  <div class="post">
+    <div class="where"><span class="what">Finance Manager</span><span class="when">March 2020 to May 2022</span></div>
+    <p class="org">Karnameh, Hezardastan IT Group, Tehran</p>
+    <ul>
+      <li>Built the finance function from nothing: recruited and trained a team of six, and cut the reporting cycle from five days to three.</li>
+      <li>Value chain analysis of the core service cut operating costs by 30 percent; Monte Carlo simulation of dispatch raised capacity utilisation by 25 percent.</li>
+      <li>Unified several databases, moving reporting from a two-day lag to real time.</li>
+    </ul>
+  </div>
+  <div class="post">
+    <div class="where"><span class="what">Financial Analyst</span><span class="when">April 2017 to February 2020</span></div>
+    <p class="org">Divar, Tehran</p>
+    <ul>
+      <li>Led financial analysis on five buy-side acquisitions, from due diligence through valuation to post-deal KPI design.</li>
+      <li>Built the company's primary valuation model and presented it to shareholders.</li>
+      <li>Designed and launched the company's first employee stock option plan, including the internal platform on which employees traded their equity.</li>
+    </ul>
+  </div>
+  <div class="post">
+    <div class="where"><span class="what">Management and Cost Accountant</span><span class="when">June 2013 to March 2017</span></div>
+    <p class="org">PMO, Tehran</p>
+    <ul>
+      <li>Found vendor payment errors in a data audit, stopping six months of overpayments.</li>
+      <li>Automated journal entries and month-end reporting with Excel macros.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Academic projects</h2>
+  <div class="post">
+    <div class="where"><span class="what">Exploring Consumer Preferences</span></div>
+    <p class="org">Bentley-Gallup Force for Good Survey</p>
+    <p>A randomised module inside the Bentley-Gallup survey, testing willingness to pay for ethical business practices. Information about a company's social responsibility was varied, and contribution decisions measured, to see how values and context move consumer choice. <a href="https://github.com/baharez/Bentley-Gallup/blob/abaaa3a2e0d7e7453407afa8da4ae934fa502002/Gallup_Bentley%20Experiment.R">R script</a></p>
+  </div>
+  <div class="post">
+    <div class="where"><span class="what">Responsible AI in credit lending</span><span class="when">Second place</span></div>
+    <p class="org">NABA x Bentley Business Bowl</p>
+    <p>Analysed where algorithmic bias enters credit lending decisions, and proposed a governance framework to make the models accountable.</p>
+  </div>
+  <div class="post">
+    <div class="where"><span class="what">US Olympic artistic gymnastics team selection</span></div>
+    <p class="org">2024 data challenge</p>
+    <p>An LSTM model forecasting athlete scores from historical competition data, used to optimise team selection. Mean squared error 0.15.</p>
+  </div>
+  <div class="post">
+    <div class="where"><span class="what">Earlier work</span></div>
+    <p>Predicting graduation rates for international students in US colleges with principal components and decision trees; regression analysis of SAT scores against the racial composition of Massachusetts schools.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Methods and tools</h2>
+  <ul class="skills">
+    <li><b>Languages</b> R, Python, SQL, SAS, Excel including VBA</li>
+    <li><b>Statistics</b> Bayesian inference, item response theory, functional data analysis, time series, causal inference, experimental design, social network analysis</li>
+    <li><b>Text as data</b> Natural language processing, sentiment analysis, topic modelling</li>
+    <li><b>Visualisation</b> Tableau, Power BI, R Shiny</li>
+    <li><b>Other</b> Git, LaTeX, Alteryx, Snowflake</li>
+  </ul>
+</section>
+</div>
+</main>
+<footer><div class="wrap">Bahareh Zahirodini</div></footer>
+</body>
 </html>
